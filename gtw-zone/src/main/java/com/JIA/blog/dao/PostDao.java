@@ -18,4 +18,5 @@ public interface PostDao {
     Post getPostById(int postId);
     List<Post> getPostByUserId(int userId);
     void updatePost(Post post);
+    void deletePost(int postId);
 }

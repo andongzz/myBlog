@@ -43,9 +43,9 @@
                     <div th:if="${not #lists.isEmpty(posts)}" th:each="post:${posts}">
                         <div class="panel panel-info">
                             <div class="panel-heading">
-                                <!--                                <a href="#" th:href="@{/blog/detail(blogId=${blog.id})}">-->
+                                 <a th:href="@{/blog/post/{id}(id=${post.postId})  }">
                                 <h3 class="panel-title" th:text="${post.subject}">Panel title</h3>
-                                <!--                                </a>-->
+                                 </a>
                             </div>
                             <div class="panel-body">
                                 <span style="color: slategray">[[${post.tag}]]</span>
@@ -62,4 +62,11 @@
     </div>
 </div>
 </body>
+
+<script>
+
+
+</script>
+
+
 </html>

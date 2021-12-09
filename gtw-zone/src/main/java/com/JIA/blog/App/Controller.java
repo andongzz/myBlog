@@ -60,8 +60,10 @@ public class Controller {
     }
 
     @GetMapping("/post/{postId}")
-    public Post getPostById(@PathVariable("postId") int postId) {
-        return service.getPostById(postId);
+    public ModelAndView getPostById(@PathVariable("postId") int postId, Map map) {
+      Post post = service.getPostById(postId);
+      map.put("post", post);
+        return new ModelAndView("user-blog-detail.html");
     }
 
     @PostMapping("/adduser")
@@ -78,9 +80,15 @@ public class Controller {
         return new RedirectView("/blog/allposts");
     }
 
-    @PostMapping("/editpost")
-    public Post editPost(int postId, int userId, String subject, String content, String tag, boolean isPrivate) {
-        return service.updatePost(postId, userId, subject, content, tag, isPrivate);
+    @PostMapping("/editpost/{postId}")
+    public RedirectView editPost(@RequestParam("blogTitle") String subject,
+                         @RequestParam("blogContent") String content,
+                         @RequestParam("blogTag") String tag,
+                         @PathVariable("postId") int blogId) {
+
+      service.updatePost(blogId,1, subject, content, tag, false);
+
+      return new RedirectView("/blog/allposts");
     }
 
     @PostMapping("/edituser")
@@ -92,5 +100,11 @@ public class Controller {
     public ModelAndView newPost() {
         return new ModelAndView("blog-create");
     }
+
+  @GetMapping("/deletePost/{postId}")
+  public RedirectView deletePost(@PathVariable("postId") int blogId) {
+      service.deletePost(blogId);
+    return new RedirectView("/blog/allposts");
+  }
 
 }

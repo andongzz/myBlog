@@ -21,18 +21,18 @@ import java.util.List;
 @Service
 @ComponentScan("Service")
 public class BlogServiceImpl {
-    
+
     @Autowired
     com.JIA.blog.dao.PostDao PostDao;
 
     @Autowired
     com.JIA.blog.dao.UserDao UserDao;
-    
+
     public List<Post> getAllPosts() {
         List<Post> posts = PostDao.getAllPosts();
         return posts;
     }
-    
+
     public List<Post> getAllPublicPosts() {
         List<Post> posts = PostDao.getAllPosts();
         List<Post> publicPosts= new ArrayList<Post>();
@@ -43,7 +43,7 @@ public class BlogServiceImpl {
         }
         return publicPosts;
     }
-    
+
     public List<User> getAllUsers() {
         List<User> users = UserDao.getAllUsers();
         return users;
@@ -51,16 +51,16 @@ public class BlogServiceImpl {
     public User getUserById(int userId) {
         User user = UserDao.getUserById(userId);
         return user;
-    }  
+    }
     public Post getPostById(int postId) {
         Post post = PostDao.getPostById(postId);
         return post;
-    }  
+    }
     public List <Post> getPostByUserId(int userId) {
         List<Post> posts = PostDao.getPostByUserId(userId);
         return posts;
-    }  
-    
+    }
+
     public Post addPost(int userId, String subject, String content, String tag, boolean isPrivate){
         Post post = new Post();
         post.setUserId(userId);
@@ -71,7 +71,7 @@ public class BlogServiceImpl {
         PostDao.addPost(post);
         return post;
     }
-    
+
     public Post updatePost(int postId, int userId, String subject, String content, String tag, boolean isPrivate){
         Post post = PostDao.getPostById(postId);
         post.setPostId(postId);
@@ -83,7 +83,7 @@ public class BlogServiceImpl {
         PostDao.updatePost(post);
         return post;
     }
- 
+
     public User addUser(String username, String password, String firstName, String lastName, String role){
         User user= new User();
         user.setUserName(username);
@@ -93,9 +93,9 @@ public class BlogServiceImpl {
         user.setRole(role);
         UserDao.addUser(user);
         return user;
-        
+
     }
-    
+
     public User udateUser( int userId, String username, String password, String firstName, String lastName, String role){
         User user= UserDao.getUserById(userId);
         user.setUserId(userId);
@@ -106,10 +106,14 @@ public class BlogServiceImpl {
         user.setRole(role);
         UserDao.updateUser(user);
         return user;
-        
+
     }
-    
-    
-    
-    
+
+    public void deletePost(int postId){
+      PostDao.deletePost(postId);
+    }
+
+
+
+
 }

@@ -1,0 +1,96 @@
+<!--
+  Created by IntelliJ IDEA.
+  User: GTerry
+  Date: 2020/11/28
+  Time: 21:12
+  To change this template use File | Settings | File Templates.
+-->
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="include/bar::head"></head>
+
+<body>
+<nav th:replace="include/bar::nav"></nav>
+<div class="container-fluid">
+    <div class="row">
+        <div th:replace="include/admin-bar::adminSidebar"></div>
+        <div class="col-sm-9 col-sm-offset-3 col-md-10 col-md-offset-2 main">
+            <div class="panel panel-default">
+                <div class="panel-heading">
+                    <h3 class="panel-title"><i class="glyphicon glyphicon-th"></i>Cloud Log</h3>
+                </div>
+                <div class="panel-body">
+                    <form class="form-inline" role="form" style="float:left;" th:action="@{/admin/cloud/log}" method="post">
+                        <div class="form-group has-feedback">
+                            <div class="input-group">
+                                <div class="input-group-addon">Condtion</div>
+                                <input class="form-control has-success" type="text" placeholder="Please type condition" name="keyword">
+                            </div>
+                        </div>
+                        <button type="submit" class="btn btn-warning"><i class="glyphicon glyphicon-search"></i>Search</button>
+                    </form>
+                    <br>
+                    <hr style="clear:both;">
+                    <table class="table">
+                        <tr>
+                            <th>IP Address</th>
+                            <th>Option Date</th>
+                            <th>Option Type</th>
+                            <th>Absolute file path</th>
+                        </tr>
+
+                        <tr th:if="${#lists.isEmpty(pageInfo.list)}">
+                            <td>none</td>
+                            <td>none</td>
+                            <td>none</td>
+                            <td>none</td>
+                        </tr>
+                        <tr th:if="${not #lists.isEmpty(pageInfo.list)}" th:each="log:${pageInfo.list}">
+                            <td th:text="${log.ip}"></td>
+                            <td th:text="${log.optionDate}"></td>
+                            <td th:text="${log.optionType}"></td>
+                            <td th:text="${log.absoluteFilePath}"></td>
+                        </tr>
+                    </table>
+                    <!-- page-->
+                </div>
+                <div class="panel-footer">
+                    <div colspan="6" align="center">
+                        <ul class="pagination">
+                            <li>
+                                <a th:href="@{/admin/cloud/log/(pageNum=1,keyword=${param.keyword})}">Top</a>
+                            </li>
+                            <li th:if="${pageInfo.hasPreviousPage}">
+                                <a th:href="@{/admin/cloud/log/(pageNum=${(pageInfo.pageNum)-1},keyword=${param.keyword})}" aria-label="Previous">
+                                    <span aria-hidden="true">&laquo;</span>
+                                </a>
+                            </li>
+
+                            <th:block th:each="page_Num:${pageInfo.navigatepageNums}">
+                                <li th:if="${page_Num} eq ${pageInfo.pageNum}" th:class="active"><a th:text="${page_Num}"></a></li>
+                                <li th:if="${page_Num} ne ${pageInfo.pageNum}">
+                                    <a th:href="@{/admin/cloud/log/(pageNum=${page_Num},keyword=${param.keyword})}" th:text="${page_Num}"></a>
+                                </li>
+                            </th:block>
+
+                            <li th:if="${pageInfo.hasNextPage}">
+                                <a th:href="@{/admin/cloud/log/(pageNum=${pageInfo.pageNum+1},keyword=${param.keyword})}" aria-label="Previous">
+                                    <span aria-hidden="true">&raquo;</span>
+                                </a>
+                            </li>
+
+                            <li>
+                                <a th:href="@{/admin/cloud/log/(pageNum=${pageInfo.pages},keyword=${param.keyword})}">tail</a>
+                            </li>
+                        </ul>
+                        </td>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+</body>
+</html>

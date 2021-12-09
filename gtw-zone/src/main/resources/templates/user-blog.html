@@ -1,0 +1,65 @@
+<!--
+  Created by IntelliJ IDEA.
+  User: GTerry
+  Date: 2020/11/25
+  Time: 20:32
+  To change this template use File | Settings | File Templates.
+-->
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="include/bar::head"></head>
+
+<body>
+<nav th:replace="include/bar::nav"></nav>
+<div class="container-fluid">
+    <div class="row">
+        <div th:replace="include/bar::sidebar"></div>
+        <div class="col-sm-9 col-sm-offset-3 col-md-10 col-md-offset-2 main">
+            <div class="panel panel-default">
+                <div class="panel-heading">
+                    <h3 class="panel-title"><i class="glyphicon glyphicon-th"></i> Blogs</h3>
+                </div>
+                <div class="panel-body">
+                    <!--                    <form class="form-inline" role="form" style="float:left;" th:action="@{/admin/page/blog}"-->
+                    <!--                          method="post">-->
+                    <!--                        <div class="form-group has-feedback">-->
+                    <!--                            <div class="input-group">-->
+                    <!--                                <div class="input-group-addon">Condtion</div>-->
+                    <!--                                <input class="form-control has-success" type="text" placeholder="Please type condition"-->
+                    <!--                                       name="keyword">-->
+                    <!--                            </div>-->
+                    <!--                        </div>-->
+                    <!--                        <button type="submit" class="btn btn-warning"><i class="glyphicon glyphicon-search"></i>Search-->
+                    <!--                        </button>-->
+                    <!--                    </form>-->
+                    <!--                    <br>-->
+                    <!--                    <hr style="clear:both;">-->
+                    <!--                    body-->
+                    <div class="list-group" th:if="${#lists.isEmpty(posts)}">
+                        <div class="panel-body">
+                            <span>nothing to found now</span>
+                        </div>
+                    </div>
+                    <div th:if="${not #lists.isEmpty(posts)}" th:each="post:${posts}">
+                        <div class="panel panel-info">
+                            <div class="panel-heading">
+                                <!--                                <a href="#" th:href="@{/blog/detail(blogId=${blog.id})}">-->
+                                <h3 class="panel-title" th:text="${post.subject}">Panel title</h3>
+                                <!--                                </a>-->
+                            </div>
+                            <div class="panel-body">
+                                <span style="color: slategray">[[${post.tag}]]</span>
+                                <br>
+                                <span th:utext="${post.content}"></span>
+                            </div>
+                        </div>
+                    </div>
+                    <!--page -->
+                </div>
+            </div>
+
+        </div>
+    </div>
+</div>
+</body>
+</html>

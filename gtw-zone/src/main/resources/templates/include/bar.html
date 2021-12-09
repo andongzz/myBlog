@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head th:fragment="head">
+    <meta charset="UTF-8">
+    <base th:href="@{/}">
+    <link rel="stylesheet" th:href="@{/staticjac/bootstrap/css/bootstrap.min.css}">
+    <link rel="stylesheet" th:href="@{/staticjac/css/font-awesome.min.css}">
+    <link rel="stylesheet" th:href="@{/staticjac/css/main.css}">
+    <style>
+        .tree li {
+            list-style-type: none;
+            cursor:pointer;
+        }
+        .tree-closed {
+            height : 40px;
+        }
+        .tree-expanded {
+            height : auto;
+        }
+
+        #sidebar a{
+            color: black;
+        }
+    </style>
+    <script th:src="@{/staticjac/jquery/jquery-2.1.1.min.js}"></script>
+    <script th:src="@{/staticjac/bootstrap/js/bootstrap.min.js}"></script>
+    <script th:src="@{/staticjac/script/docs.min.js}"></script>
+
+    <script type="text/javascript">
+        $(function () {
+            $(".list-group-item").click(function(){
+                if ( $(this).find("ul") ) {
+                    $(this).toggleClass("tree-closed");
+                    if ( $(this).hasClass("tree-closed") ) {
+                        $("ul", this).hide("fast");
+                    } else {
+                        $("ul", this).show("fast");
+                    }
+                }
+            });
+        });
+    </script>
+    </div>
+</head>
+<body>
+<!--common nav-->
+<%@ taglib uri="http://www.springframework.org/security/tags" prefix="security" %>
+<nav class="navbar navbar-inverse navbar-fixed-top" role="navigation" th:fragment="nav">
+    <div class="container-fluid">
+        <div class="navbar-header">
+            <div><a class="navbar-brand" style="font-size:32px;" href="#">J.I.A. Montreal</a></div>
+        </div>
+        <div id="navbar" class="navbar-collapse collapse">
+            <ul class="nav navbar-nav navbar-right">
+                <li style="padding-top:8px;">
+                    <div class="btn-group">
+                        <button  href="admin/login" style="color: white" class="btn btn-default btn-success dropdown-toggle" th:if="not ${session?.SPRING_SECURITY_CONTEXT?.authentication?.principal?.username}">
+                            <i class="glyphicon glyphicon-user"></i>
+                            <span th:text="Mthree"></span>
+                            <span class="caret"></span>
+                        </button>
+                    </div>
+                </li>
+<!--                <li style="margin-left:10px;padding-top:8px;">-->
+<!--                    <button type="button" class="btn btn-default btn-danger">-->
+<!--                        <span class="glyphicon glyphicon-question-sign"></span> Help-->
+<!--                    </button>-->
+<!--                </li>-->
+            </ul>
+<!--            <form class="navbar-form navbar-right">-->
+<!--                <input type="text" class="form-control" placeholder="Search">-->
+<!--            </form>-->
+        </div>
+    </div>
+</nav>
+<!--common sidebar-->
+<div class="col-sm-3 col-md-2 sidebar"  id="sidebar" th:fragment="sidebar">
+    <div class="tree">
+        <ul style="padding-left:0px;" class="list-group">
+            <li class="list-group-item tree-closed" >
+                <a class="nav-link" href="main.html" th:href="@{/}"><i class="glyphicon glyphicon-home"></i>&nbsp;&nbsp;Home Page</a>
+            </li>
+            <li class="list-group-item tree-closed" >
+                <a class="nav-link" href="main.html" th:href="@{/blog/allposts}"><i class="glyphicon glyphicon-book"></i>&nbsp;&nbsp;Blogs</a>
+            </li>
+            <li class="list-group-item tree-closed">
+                <a href="main.html" th:href="@{/blog/newpost}"><i class="glyphicon glyphicon-plus"></i>&nbsp;&nbsp;Add Blog</a>
+            </li>
+            <li class="list-group-item tree-closed">
+                <span><i class="glyphicon glyphicon-user black"></i>&nbsp;&nbsp;Admins <span class="badge" style="float:right">3</span></span>
+                <ul style="margin-top:10px;display:none;">
+                    <li style="height:30px;">
+                        <i class="glyphicon glyphicon-sunglasses"></i>&nbsp;&nbsp;Andong
+                    </li>
+                    <li style="height:30px;">
+                        <i class="glyphicon glyphicon-sunglasses"></i>&nbsp;&nbsp;Jeff
+                    </li>
+                    <li style="height:30px;">
+                        <i class="glyphicon glyphicon-sunglasses"></i>&nbsp;&nbsp;Ilyas
+                    </li>
+                </ul>
+            </li>
+        </ul>
+    </div>
+</div>
+</body>
+</html>

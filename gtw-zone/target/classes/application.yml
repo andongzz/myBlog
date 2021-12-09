@@ -1,0 +1,17 @@
+server:
+  port: 8080
+spring:
+  datasource:
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    url: jdbc:mysql://18.223.28.176:3306/blogdb?serverTimezone=America/Chicago&useSSL=false
+    username: root
+    password: f29292299
+#    password: root
+  servlet:
+    multipart:
+      max-file-size: 1000MB
+      max-request-size: 1000MB
+  mvc:
+    static-path-pattern: /**
+  resources:
+    static-locations: file:/gtw-zone/root/, classpath:/META-INF/resources/, classpath:/resources/, classpath:/static/, classpath:/public/

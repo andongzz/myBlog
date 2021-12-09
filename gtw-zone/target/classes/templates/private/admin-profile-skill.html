@@ -1,0 +1,47 @@
+<!--
+  Created by IntelliJ IDEA.
+  User: GTerry
+  Date: 2020/11/27
+  Time: 23:44
+  To change this template use File | Settings | File Templates.
+-->
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="include/bar::head"></head>
+
+<body>
+<nav th:replace="include/bar::nav"></nav>
+<div class="container-fluid">
+    <div class="row">
+        <div th:replace="include/admin-bar::adminSidebar"></div>
+        <div class="col-sm-9 col-sm-offset-3 col-md-10 col-md-offset-2 main">
+            <div class="panel panel-default">
+                <div class="panel-body">
+                    <div>
+                        <table class="table">
+                           <tr>
+                               <th>Skill Name</th>
+                               <th>Skill Level</th>
+                               <th>Skill Description</th>
+                           </tr>
+                            <form action="/admin/profile/skill/set" method="post" th:each="skillInfo:${skillList}">
+                                <input type="hidden" name="id" th:value="${skillInfo.id}">
+                                <input type="hidden" name="baseId" th:value="${skillInfo.baseId}">
+                                <tr>
+                                    <td><input type="text" name="skillName" th:value="${skillInfo.skillName}"></td>
+                                    <td><input type="text" name="skillLevel" th:value="${skillInfo.skillLevel}"></td>
+                                    <td><input type="text" name="skillDescription" th:value="${skillInfo.skillDescription}"></td>
+                                    <td><button class="glyphicon glyphicon-ok" type="submit"></button></td>
+                                </tr>
+                            </form>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+</div>
+
+</body>
+</html>

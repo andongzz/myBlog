@@ -1,0 +1,53 @@
+<!--
+  Created by IntelliJ IDEA.
+  User: GTerry
+  Date: 2020/11/24
+  Time: 21:44
+  To change this template use File | Settings | File Templates.
+-->
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="include/bar::head"></head>
+<script th:src="@{/staticjac/kindEditor/kindeditor-all-min.js}"></script>
+<script type="text/javascript">
+    var editor;
+    KindEditor.ready(function(K) {
+        editor = K.create('#blogContent', {
+            items : [
+                'fontname', 'fontsize', '|', 'forecolor', 'hilitecolor', 'bold', 'italic', 'underline',
+                'removeformat', '|', 'justifyleft', 'justifycenter', 'justifyright', 'insertorderedlist',
+                'insertunorderedlist', '|', 'emoticons', 'image', 'link']
+        });
+    });
+</script>
+<body>
+<nav th:replace="include/bar::nav"></nav>
+<div class="container-fluid">
+    <div class="row">
+        <div th:replace="include/admin-bar::adminSidebar"></div>
+        <div class="col-sm-9 col-sm-offset-3 col-md-10 col-md-offset-2 main">
+            <div class="panel panel-default">
+                <form th:action="@{/admin/edit/blog}" method="post">
+                    <input type="hidden" name="blogId" th:value="${blog.id}">
+                    <div class="panel-heading">
+                        <label>Title:</label>
+                        <input type="text" name="blogTitle" th:value="${blog.title}">
+                    </div>
+
+                    <div class="panel-body">
+                        <label>Content:</label><p></p>
+                        <textarea id="blogContent" name="blogContent" th:text="${blogText.content}" style="width: 1170px;height: 470px"></textarea>
+                    </div>
+                    <div class="panel-footer">
+                        <button type="submit" id="saveBtn" class="btn btn-success">Save</button>
+                        <a th:href="@{admin/page/blog(pageNum=${param.pageNum},keyword=${param.keyword})}" type="button" id="cancelBtn" class="btn btn-warning">Cancel</a>
+                    </div>
+                </form>
+            </div>
+        </div>
+        </div>
+    </div>
+</div>
+
+</body>
+</html>

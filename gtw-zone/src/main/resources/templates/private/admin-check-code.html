@@ -1,0 +1,72 @@
+<!--
+  Created by IntelliJ IDEA.
+  User: GTerry
+  Date: 2020/11/28
+  Time: 22:01
+  To change this template use File | Settings | File Templates.
+-->
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="include/bar::head"></head>
+
+<body>
+<nav th:replace="include/bar::nav"></nav>
+<div class="container-fluid">
+    <div class="row">
+        <div th:replace="include/admin-bar::adminSidebar"></div>
+        <div class="col-sm-9 col-sm-offset-3 col-md-10 col-md-offset-2 main">
+            <div class="panel panel-default">
+                <div class="panel-heading">
+                    Check Code
+                </div>
+                <div class="panel-body">
+                    <div>
+                        <p id="resetMessage"></p>
+                    </div>
+                    <table class="table">
+                        <tr>
+                            <td><label>Cloud Upload Check Code</label></td>
+                            <td><input type="text" name="cloudUploadCheckCode"></td>
+                            <td><button class="btn btn-danger resetBtn"  optionType="upload">reset</button></td>
+                        </tr>
+                        <tr>
+                            <td><label>Cloud Download Check Code</label></td>
+                            <td> <input type="text" name="cloudUploadCheckCode"></td>
+                            <td> <button class="btn btn-danger resetBtn" optionType="download">reset</button></td>
+                        </tr>
+                        <tr>
+                            <td><label>Blog Comment Check Code</label></td>
+                            <td><input type="text" name="cloudUploadCheckCode"></td>
+                            <td><button class="btn btn-danger resetBtn"  optionType="blogComment">reset</button></td>
+                        </tr>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+</body>
+<script>
+    $(".resetBtn").click(function (){
+        $("#resetMessage").empty();
+        var checkCodeInput=$(this).parent().parent().find("input:eq(0)");
+        var optionType=$(this).attr("optionType")
+        $.ajax({
+            url:"admin/check/code/reset",
+            data:{checkCode:checkCodeInput.val(),optionType:optionType},
+            type:"POST",
+            dataType:"JSON",
+            success:function (result){
+                if(result.code==100){
+                    $("#resetMessage").text("reset "+optionType+" success")
+                }else{
+                    $("#resetMessage").text("reset "+optionType+" error")
+                }
+            },
+            error:function (){
+                $("#resetMessage").text("reset "+optionType+" error")
+            }
+        })
+    })
+</script>
+</html>

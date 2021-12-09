@@ -1,0 +1,66 @@
+<!--
+  Created by IntelliJ IDEA.
+  User: GTerry
+  Date: 2020/11/27
+  Time: 23:43
+  To change this template use File | Settings | File Templates.
+-->
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="include/bar::head"></head>
+
+<body>
+<nav th:replace="include/bar::nav"></nav>
+<div class="container-fluid">
+    <div class="row">
+        <div th:replace="include/admin-bar::adminSidebar"></div>
+        <div class="col-sm-9 col-sm-offset-3 col-md-10 col-md-offset-2 main">
+            <div class="panel panel-default" th:each="educationInfo:${educationList}">
+                <div class="panel-body" >
+                    <form action="/admin/profile/education/set" method="post"  enctype="multipart/form-data">
+                        <input type="hidden" name="id" th:value="${educationInfo.id}">
+                        <input type="hidden" name="baseId" th:value="${educationInfo.baseId}">
+                        <div class="form-group">
+                            <label >Degree</label>
+                            <input type="text" class="form-control" name="degree"  th:value="${educationInfo.degree}">
+                        </div>
+                        <div class="form-group">
+                            <label >School Name</label>
+                            <input type="text" class="form-control" name="schoolName"  th:value="${educationInfo.schoolName}">
+                        </div>
+                        <div class="form-group">
+                            <label >Profession</label>
+                            <input type="text" class="form-control" name="profession"  th:value="${educationInfo.profession}">
+                        </div>
+                        <div class="form-group">
+                            <label >School Location</label>
+                            <input type="text" class="form-control" name="schoolLocation"  th:value="${educationInfo.schoolLocation}">
+                        </div>
+                        <div class="form-group">
+                            <label >Start Date</label>
+                            <input type="text" class="form-control" name="startDate"  th:value="${educationInfo.startDate}">
+                        </div>
+                        <div class="form-group">
+                            <label >End Date</label>
+                            <input type="text" class="form-control" name="endDate"  th:value="${educationInfo.endDate}">
+                        </div>
+                        <div class="form-group">
+                            <label >GPA</label>
+                            <input type="text" class="form-control" name="gpa"  th:value="${educationInfo.gpa}">
+                        </div>
+                        <div class="form-group">
+                            <label for="inputPhoto">School Logo</label>
+                            <input type="file" id="inputPhoto" name="photo">
+                            <p class="help-block">Choose your school logo</p>
+                        </div>
+                        <button type="submit" class="btn btn-default">Submit</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+
+    </div>
+</div>
+
+</body>
+</html>

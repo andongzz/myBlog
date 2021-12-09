@@ -1,0 +1,112 @@
+<!--
+  Created by IntelliJ IDEA.
+  User: GTerry
+  Date: 2020/11/24
+  Time: 21:42
+  To change this template use File | Settings | File Templates.
+-->
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="include/bar::head"></head>
+
+<body>
+<nav th:replace="include/bar::nav"></nav>
+<div class="container-fluid">
+    <div class="row">
+        <div th:replace="include/admin-bar::adminSidebar"></div>
+        <div class="col-sm-9 col-sm-offset-3 col-md-10 col-md-offset-2 main">
+            <div class="panel panel-default">
+                <div class="panel-heading">
+                    <h3 class="panel-title"><i class="glyphicon glyphicon-th"></i>Blogs</h3>
+                </div>
+                <div class="panel-body">
+                    <form class="form-inline" role="form" style="float:left;" th:action="@{/admin/page/blog}" method="post">
+                        <div class="form-group has-feedback">
+                            <div class="input-group">
+                                <div class="input-group-addon">Condtion</div>
+                                <input class="form-control has-success" type="text" placeholder="Please type condition" name="keyword">
+                            </div>
+                        </div>
+                        <button type="submit" class="btn btn-warning"><i class="glyphicon glyphicon-search"></i>Search</button>
+                    </form>
+                    <a type="button" class="btn btn-primary" style="float:right;" th:href="@{/admin/to/create/blog/page}"><i class="glyphicon glyphicon-plus"></i> Add</a>
+                    <br>
+                    <hr style="clear:both;">
+                    <!-- body-->
+                    <div class="list-group" th:if="${#lists.isEmpty(pageInfo.list)}">
+                        <div class="panel-body">
+                            <span>nothing to found now</span>
+                        </div>
+                    </div>
+                    <div th:if="${not #lists.isEmpty(pageInfo.list)}" th:each="blog:${pageInfo.list}">
+                        <div class="panel panel-warning">
+                            <div class="panel-heading">
+                                <h3 class="panel-title" th:text="${blog.title}">Panel title</h3>
+                            </div>
+                            <div class="panel-body">
+                                <span>[[${blog.createdate}]]  reviews:[[${blog.commentCount}]]</span>
+                                <a th:href="@{admin/to/edit/blog/page(blogId=${blog.id},pageNum=${param.pageNum},keyword=${param.keyword})}"
+                                   class="btn btn-primary btn-xs col-xs-offset-8"><i class=" glyphicon glyphicon-pencil"></i></a>
+                                <a id="deleteBtn" class="btn btn-danger btn-xs" th:href="@{admin/delete/blog(blogId=${blog.id},pageNum=${param.pageNum},keyword=${param.keyword})}" >
+                                    <i class=" glyphicon glyphicon-remove"></i></a>
+                                <a id="commonBtn" class="btn btn-danger btn-xs" th:href="@{admin/load/blog/comment(blogId=${blog.id},pageNum=${param.pageNum},keyword=${param.keyword})}" >
+                                    <i class="glyphicon glyphicon-list-alt"></i></a>
+                            </div>
+                        </div>
+                    </div>
+                    <!--page -->
+                    <div colspan="6" align="center">
+                            <ul class="pagination">
+                                <li>
+                                    <a th:href="@{/admin/page/blog/(pageNum=1,keyword=${param.keyword})}">Top</a>
+                                </li>
+                                <li th:if="${pageInfo.hasPreviousPage}">
+                                    <a th:href="@{/admin/page/blog/(pageNum=${(pageInfo.pageNum)-1},keyword=${param.keyword})}" aria-label="Previous">
+                                        <span aria-hidden="true">&laquo;</span>
+                                    </a>
+                                </li>
+
+                                <th:block th:each="page_Num:${pageInfo.navigatepageNums}">
+                                    <li th:if="${page_Num} eq ${pageInfo.pageNum}" th:class="active"><a th:text="${page_Num}"></a></li>
+                                    <li th:if="${page_Num} ne ${pageInfo.pageNum}">
+                                        <a th:href="@{/admin/page/blog/(pageNum=${page_Num},keyword=${param.keyword})}" th:text="${page_Num}"></a>
+                                    </li>
+                                </th:block>
+
+                                <li th:if="${pageInfo.hasNextPage}">
+                                    <a th:href="@{/admin/page/blog/(pageNum=${pageInfo.pageNum+1},keyword=${param.keyword})}" aria-label="Previous">
+                                        <span aria-hidden="true">&raquo;</span>
+                                    </a>
+                                </li>
+
+                                <li>
+                                    <a th:href="@{/admin/page/blog/(pageNum=${pageInfo.pages},keyword=${param.keyword})}">tail</a>
+                                </li>
+                            </ul>
+                        </td>
+
+                </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+</body>
+<script type="text/javascript">
+
+    // $("#editBtn").click(function (){
+    //     var blogId=$(this).attr("blogId");
+    //     var pageNum=$(this).attr("pageNum");
+    //     var keyword=$(this).attr("keyword")
+    //     window.location.href="admin/edit/blog?blogId="+blogId+"&pageNum="+pageNum+"&keyword="+keyword;
+    // })
+
+    // $("#deleteBtn").click(function(){
+    //     var blogId=$(this).attr("blogId");
+    //
+    //    console.log("admin/go/edit/blog/page?blogId="+blogId+"&pageNum="+pageNum+"&keyword="+keyword);
+    //     window.location.href="admin/go/edit/blog/page?blogId="+blogId+"&pageNum="+pageNum+"&keyword="+keyword;
+    // })
+
+</script>
+</html>

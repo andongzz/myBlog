@@ -1,0 +1,145 @@
+<!--
+  Created by IntelliJ IDEA.
+  User: GTerry
+  Date: 2020/11/25
+  Time: 23:20
+  To change this template use File | Settings | File Templates.
+-->
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="include/bar::head"></head>
+<script th:src="@{/staticjac/kindEditor/kindeditor-all-min.js}"></script>
+<script type="text/javascript">
+    var editor;
+    KindEditor.ready(function(K) {
+        editor = K.create('#blogCommentContent', {
+            items : [
+                'fontname', 'fontsize', '|', 'forecolor', 'hilitecolor', 'bold', 'italic', 'underline',
+                'removeformat', '|', 'justifyleft', 'justifycenter', 'justifyright', 'insertorderedlist',
+                'insertunorderedlist', '|', 'emoticons', 'image', 'link']
+        });
+    });
+</script>
+<body>
+<nav th:replace="include/bar::nav"></nav>
+<div class="container-fluid">
+    <div class="row">
+        <div th:replace="include/bar::sidebar"></div>
+        <div class="col-sm-9 col-sm-offset-3 col-md-10 col-md-offset-2 main">
+            <div class="panel panel-primary">
+                <div class="panel-heading" id="blogTitle" th:blogId="${blog.id}">
+                    <h4 th:text="${blog.title}"></h4>
+                    <p>[[${blog.createdate}]]</p>
+                </div>
+                <div class="panel-body">
+                    <div th:utext="${blogText.content}"></div>
+                </div>
+            </div>
+        </div>
+        <div class="col-sm-9 col-sm-offset-3 col-md-10 col-md-offset-2 main">
+            <div class="panel panel-info">
+                <div class="panel-heading" >
+                    <h4>Comments</h4>
+                </div>
+                <div class="panel-body" id="commentArea"></div>
+                <div align="center" id="pageBar"></div>
+                <div class="panel-footer">
+                    <form th:action="@{/blog/comment/save}" method="post">
+                        <input type="hidden" name="blogId" th:value="${blog.id}">;
+                        <div class="panel-body">
+                            <textarea id="blogCommentContent" name="content" style="width: 500px;height: 300px"></textarea>
+                            <div style="margin-top: 20px">
+                                <label>Check Code: </label>
+                                <input type="text" name="checkCode" style="width: 80px">
+                                <button type="submit" id="saveBtn" class="btn btn-success">Submit</button>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+</body>
+<script>
+    $(function (){
+        to_page(1);
+    })
+    function to_page(pn){
+        var blogId=$("#blogTitle").attr("blogId")
+        $.ajax({
+            url:"/blog/comments",
+            data:"pageNum="+pn+"&blogId="+blogId,
+            type:"GET",
+            success:function (result){
+                get_build_pageBar(result.data);
+                get_build_comments(result.data.list)
+            },
+            error:function (){
+                alert("error");
+            }
+        })
+    }
+    function get_build_comments(commentList){
+        console.log(commentList)
+        var commentArea = $("#commentArea");
+        commentArea.empty();
+        if(commentList.length==0){
+            commentArea.append($("<div class='panel panel-default'><div><p align='center' style='margin-top: 20px'>No one has left a comment yet</p></div><div class='panel-body'></div></div>"));
+            return
+        }
+        $.each(commentList,function (index,item){
+            var commentHead=$("<div></div>").append($("<p align='left'>"+"#"+item.layerId+"     "+item.ip+"</p>"))
+            var commentBody=$("<div></div>").append($("<p align='left'>"+item.content+"</p>"));
+            var commentFooter=$("<div></div>").append($("<p align='right'>"+item.createdate+"</p>"));
+            var commentEntity=$("<div class='panel-body'>").append(commentHead).append(commentBody).append(commentFooter);
+           $("<div class='panel panel-default'></div></div>").append(commentEntity).appendTo($("#commentArea"));
+        })
+
+    }
+    function get_build_pageBar(pageInfo){
+        $("#pageBar").empty();
+        var ul=$("<ul></ul>").addClass("pagination");
+        var firtpageLi=$("<li></li>").append($("<a></a>").append("Top"));
+        var preLi=$("<li></li>").append($("<a></a>").append($("<span></span>").attr("aria-hidden","true").append("&laquo;")));
+        if(pageInfo.hasPreviousPage==false){
+            preLi.addClass("disabled");
+            firtpageLi.addClass("disabled");}
+        else{
+            firtpageLi.click(function (){
+                to_page(1);
+            })
+            preLi.click(function (){
+                to_page(pageInfo.pageNum-1);
+            })
+        }
+        var nextLi=$("<li></li>").append($("<a></a>").append($("<span></span>").attr("aria-hidden","true").append("&raquo;")));
+        var lastpageLi=$("<li></li>").append($("<a></a>").append("Tail"));
+        if(pageInfo.hasNextPage==false){
+            nextLi.addClass("disabled");
+            lastpageLi.addClass("disabled");}
+        else{
+            nextLi.click(function (){
+                to_page(pageInfo.pageNum+1);
+            })
+            lastpageLi.click(function (){
+                to_page(pageInfo.pages);
+            })
+        }
+
+        ul.append(firtpageLi).append(preLi);
+        $.each(pageInfo.navigatepageNums,function (index,item){
+            var li=$("<li></li>").append($("<a></a>").append(item));
+            if(pageInfo.pageNum==item)
+                li.addClass("active");
+            li.click(function(){
+                to_page(item);
+            })
+            ul.append(li);
+        })
+        ul.append(nextLi).append(lastpageLi);
+        var navEle=$("<nav></nav>").attr("aria-label","Page navigation").append(ul);
+        navEle.appendTo($("#pageBar"))
+    }
+</script>
+</html>

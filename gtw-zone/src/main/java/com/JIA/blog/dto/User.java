@@ -31,16 +31,17 @@ public class User {
     public void setRole(String role) {
         this.role = role;
     }
-    
+
 
     public User() {
     }
 
-    public User(String userName, String password, String firstName, String lastName) {
+    public User(String userName, String password, String firstName, String lastName,String role) {
         this.userName = userName;
         this.password = password;
         this.firstName = firstName;
         this.lastName = lastName;
+        this.role = role;
     }
 
 
@@ -83,5 +84,22 @@ public class User {
     public void setLastName(String lastName) {
         this.lastName = lastName;
     }
-    
+
+  @Override
+  public boolean equals(Object o) {
+    if (this == o) return true;
+    if (o == null || getClass() != o.getClass()) return false;
+    User user = (User) o;
+    return userId == user.userId &&
+      Objects.equals(userName, user.userName) &&
+      Objects.equals(password, user.password) &&
+      Objects.equals(firstName, user.firstName) &&
+      Objects.equals(lastName, user.lastName) &&
+      Objects.equals(role, user.role);
+  }
+
+  @Override
+  public int hashCode() {
+    return Objects.hash(userId, userName, password, firstName, lastName, role);
+  }
 }

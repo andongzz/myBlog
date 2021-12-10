@@ -5,6 +5,8 @@
  */
 package com.JIA.blog.dto;
 
+import java.util.Objects;
+
 /**
  *
  * @author Fishget
@@ -19,8 +21,8 @@ public class Post {
 
     public Post() {
     }
-    
-    
+
+
     public Post(int userId,String subject, String content, String tag, boolean isPrivate) {
         this.userId = userId;
         this.subject = subject;
@@ -29,7 +31,25 @@ public class Post {
         this.isPrivate = isPrivate;
     }
 
-    public int getUserId() {
+  @Override
+  public boolean equals(Object o) {
+    if (this == o) return true;
+    if (o == null || getClass() != o.getClass()) return false;
+    Post post = (Post) o;
+    return postId == post.postId &&
+      userId == post.userId &&
+      isPrivate == post.isPrivate &&
+      Objects.equals(subject, post.subject) &&
+      Objects.equals(content, post.content) &&
+      Objects.equals(tag, post.tag);
+  }
+
+  @Override
+  public int hashCode() {
+    return Objects.hash(postId, userId, subject, content, tag, isPrivate);
+  }
+
+  public int getUserId() {
         return userId;
     }
 
@@ -77,5 +97,5 @@ public class Post {
         this.isPrivate = isPrivate;
     }
 
-    
+
 }

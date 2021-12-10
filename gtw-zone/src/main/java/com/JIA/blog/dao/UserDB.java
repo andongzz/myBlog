@@ -22,21 +22,22 @@ import java.util.List;
 @Repository
 
 public class UserDB implements UserDao {
-     
+
     @Autowired
     JdbcTemplate jdbc;
-    
+
     public static final class UserMapper implements RowMapper<User> {
 
         public User mapRow(ResultSet rs, int index) throws SQLException {
             User user = new User();
+            user.setUserId(rs.getInt("user_id"));
             user.setUserName(rs.getString("user_name"));
             user.setPassword(rs.getString("password"));
             user.setFirstName(rs.getString("first_name"));
             user.setLastName(rs.getString("last_name"));
             user.setRole(rs.getString("role"));
             return user;
-        }    
+        }
     }
 
     public User addUser(User user) {
@@ -46,7 +47,7 @@ public class UserDB implements UserDao {
         user.setUserId(newUserId);
         return getUserById(newUserId);
     }
-    
+
        public List<User> getAllUsers() {
         final String SELECT_ALL_USERS = "SELECT * FROM user";
         return jdbc.query(SELECT_ALL_USERS, new UserMapper());
@@ -56,12 +57,12 @@ public class UserDB implements UserDao {
     public User getUserById(int userId) {
             final String SELECT_USER_BY_ID = "SELECT * FROM user WHERE user_id = ?";
             return jdbc.queryForObject(SELECT_USER_BY_ID, new UserMapper(), userId);
-        
+
     }
 
      public void updateUser(User user) {
         final String UPDATE_USER = "UPDATE user SET user_name = ?, password = ?, first_name = ?, last_name = ?, role = ? WHERE user_id = ?";
         jdbc.update(UPDATE_USER, user.getUserName(), user.getPassword(),user.getFirstName(),user.getLastName(),user.getRole(),user.getUserId());
     }
-    
+
 }
